@@ -17,22 +17,22 @@ for (let i = 0; i < 9; i++) {
   tableBody.appendChild(row);
 }
 
-// převede text z OCR na 2D pole 9x9
-function parseTextToBoard(text) {
-  const nums = text.replace(/[^1-9]/g, '').split('');
+// přečte tabulku do 2D pole
+function readBoard() {
   const board = [];
-  let k = 0;
-  for (let i = 0; i < 9; i++) {
+  const rows = document.querySelectorAll('#sudoku tr');
+  rows.forEach((tr) => {
     const row = [];
-    for (let j = 0; j < 9; j++) {
-      row.push(nums[k] ? parseInt(nums[k++]) : 0);
-    }
+    tr.querySelectorAll('input').forEach((input) => {
+      const val = parseInt(input.value);
+      row.push(isNaN(val) ? 0 : val);
+    });
     board.push(row);
-  }
+  });
   return board;
 }
 
-// zobrazí pole do tabulky
+// zobrazí 2D pole do tabulky
 function setBoard(board) {
   const rows = document.querySelectorAll('#sudoku tr');
   rows.forEach((tr, i) => {
@@ -44,6 +44,8 @@ function setBoard(board) {
 
 // Sudoku solver (backtracking)
 function solveSudoku(board) {
+  const fixed = board.map(row => row.map(cell => cell !== 0));
+
   function isValid(board, row, col, num) {
     for (let i = 0; i < 9; i++) {
       if (board[row][i] === num || board[i][col] === num) return false;
@@ -59,7 +61,7 @@ function solveSudoku(board) {
   function backtrack() {
     for (let row = 0; row < 9; row++) {
       for (let col = 0; col < 9; col++) {
-        if (board[row][col] === 0) {
+        if (!fixed[row][col] && board[row][col] === 0) {
           for (let num = 1; num <= 9; num++) {
             if (isValid(board, row, col, num)) {
               board[row][col] = num;
@@ -77,38 +79,18 @@ function solveSudoku(board) {
   return backtrack();
 }
 
-// zpracování souboru + OCR
-document.querySelector('#solveBtn').addEventListener('click', async () => {
-  const file = document.querySelector('#fileInput').files[0];
+// tlačítko řešení
+document.querySelector('#solveBtn').addEventListener('click', () => {
   const message = document.querySelector('#message');
+  const board = readBoard();
 
-  if (!file) {
-    message.textContent = 'Nahraj obrázek Sudoku!';
-    message.style.color = 'red';
-    return;
-  }
-
-  message.textContent = 'Skenuji obrázek...';
-  message.style.color = 'black';
-
-  try {
-    const {
-      data: { text },
-    } = await Tesseract.recognize(file, 'eng');
-    let board = parseTextToBoard(text);
+  if (solveSudoku(board)) {
     setBoard(board);
-
-    if (solveSudoku(board)) {
-      setBoard(board);
-      message.textContent = 'Sudoku bylo vyřešeno!';
-      message.style.color = 'green';
-    } else {
-      message.textContent = 'Sudoku nelze vyřešit!';
-      message.style.color = 'red';
-    }
-  } catch (error) {
-    message.textContent = 'Chyba při čtení obrázku!';
+    message.textContent = 'Sudoku bylo vyřešeno!';
+    message.style.color = 'green';
+  } else {
+    message.textContent = 'Sudoku nelze vyřešit!';
     message.style.color = 'red';
-    console.error(error);
   }
 });
+
