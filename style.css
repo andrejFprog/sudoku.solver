@@ -12,48 +12,51 @@ body {
 .container {
     text-align: center;
     width: 100%;
-    max-width: 360px; /* table se zmenší na menších displejích */
+    max-width: 500px;
 }
 
 h1 {
-    margin-bottom: 10px;
-    font-size: 22px;
+    margin-bottom: 15px;
+    font-size: 24px;
 }
 
 /* Tabulka */
 table {
     margin: 20px auto;
-    border-collapse: collapse;
+    border-collapse: separate; /* důležité pro spacing */
+    border-spacing: 2px;       /* mezery mezi buňkami */
     width: 100%;
-    table-layout: fixed; /* všechny buňky stejná šířka */
+    table-layout: fixed;
+    background-color: black;    /* černé mezery mezi buňkami */
 }
 
 /* Buňky tabulky */
 td {
-    border-left: 1px solid #333;
+    background-color: white;
+    width: calc(100% / 9);
+    height: 0;
+    padding-bottom: calc(100% / 9); /* čtvercové buňky */
     position: relative;
-    width: 11.11%; /* 100% / 9 */
-    aspect-ratio: 1 / 1; /* vždy square */
-    background-color: #fff;
+    border: 1px solid #888; /* slabší linky uvnitř */
 }
 
 /* input uvnitř buňky */
 td input {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
     width: 100%;
     height: 100%;
     text-align: center;
-    font-size: 18px;
+    font-size: 20px;
     border: none;
 }
 
-/* Sloupce odděleny černou linkou */
+/* Silné čáry pro 3x3 bloky */
 td:nth-child(3n) {
     border-right: 3px solid black;
 }
-
-/* Řádky 3x zvýrazněny barvou pozadí, ne linkou */
 tr:nth-child(3n) td {
-    background-color: #e0e0e0;
+    border-bottom: 3px solid black;
 }
 
 /* Tlačítko */
@@ -76,6 +79,6 @@ button:hover {
 #message {
     margin-top: 10px;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
     min-height: 24px;
 }
