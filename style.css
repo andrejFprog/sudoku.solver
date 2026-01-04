@@ -12,42 +12,51 @@ body {
 .container {
     text-align: center;
     width: 100%;
-    max-width: 400px;
+    max-width: 360px; /* table se zmenší na menších displejích */
 }
 
 h1 {
-    margin-bottom: 15px;
-    font-size: 24px;
+    margin-bottom: 10px;
+    font-size: 22px;
 }
 
+/* Tabulka */
 table {
     margin: 20px auto;
     border-collapse: collapse;
-    background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    width: 100%;
+    table-layout: fixed; /* všechny buňky stejná šířka */
 }
 
+/* Buňky tabulky */
 td {
-    border: 1px solid #333;
-    width: 40px;
-    height: 40px;
+    border-left: 1px solid #333;
+    position: relative;
+    width: 11.11%; /* 100% / 9 */
+    aspect-ratio: 1 / 1; /* vždy square */
+    background-color: #fff;
 }
 
-input {
+/* input uvnitř buňky */
+td input {
     width: 100%;
     height: 100%;
     text-align: center;
-    font-size: 20px;
+    font-size: 18px;
     border: none;
 }
 
+/* Sloupce odděleny černou linkou */
 td:nth-child(3n) {
     border-right: 3px solid black;
 }
+
+/* Řádky 3x zvýrazněny barvou pozadí, ne linkou */
 tr:nth-child(3n) td {
-    border-bottom: 3px solid black;
+    background-color: #e0e0e0;
 }
 
+/* Tlačítko */
 button {
     margin-top: 15px;
     padding: 10px 25px;
@@ -63,9 +72,10 @@ button:hover {
     background: #45a049;
 }
 
+/* zpráva */
 #message {
     margin-top: 10px;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 16px;
     min-height: 24px;
 }
